@@ -46,13 +46,8 @@ fi
 
 if [ -n "$x" ]; then
     # Mock computation: compute result = x + y + z (or just x if y,z not present)
-    # Using awk for floating point arithmetic
-    result=$(awk "BEGIN {
-        x = ${x:-0}
-        y = ${y:-0}
-        z = ${z:-0}
-        print x + y + z
-    }")
+    # Using awk with -v for safe variable passing
+    result=$(awk -v x="${x:-0}" -v y="${y:-0}" -v z="${z:-0}" 'BEGIN { print (x+0) + (y+0) + (z+0) }')
     echo "Input values: x=$x, y=${y:-0}, z=${z:-0}"
     echo "Result: $result"
     echo "$result" > output.txt

@@ -134,7 +134,7 @@ def test_with_fz():
         with tempfile.TemporaryDirectory() as tmpdir:
             fz.fzc(
                 "examples/Model/input.txt",
-                {"x": 3.14, "y": 2.0, "z": 1.5},
+                {"x": 3.14, "y": 2.71, "z": 1.5},
                 "Model",
                 output_dir=tmpdir
             )
@@ -151,7 +151,7 @@ def test_with_fz():
             with open(compiled_file, 'r') as f:
                 content = f.read()
                 assert "3.14" in content, "Variable x not substituted"
-                assert "2.0" in content or "2" in content, "Variable y not substituted"
+                assert "2.71" in content, "Variable y not substituted"
                 assert "1.5" in content, "Variable z not substituted"
                 assert "${x}" not in content, "Variable marker ${x} still present"
                 assert "${y}" not in content, "Variable marker ${y} still present"
