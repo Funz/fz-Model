@@ -28,19 +28,32 @@ fi
 PID_FILE=$PWD/PID
 echo $$ >> $PID_FILE
 
-# Mock calculation: extract the value from the input file and write to output
+# Mock calculation: extract values from the input file and compute a result
 # This simulates a real calculation that produces an output file
 # Replace this section with actual calls to your simulation code
 
 echo "Running mock calculation on $input..."
 
-# Extract variable value from input (looking for "value = X" pattern)
-value=$(grep -E '^value\s*=' "$input" | sed 's/.*=\s*//' | tr -d '[:space:]')
+# Extract variable values from input (looking for "var = X" pattern)
+x=$(grep -E '^x\s*=' "$input" | sed 's/.*=\s*//' | tr -d '[:space:]')
+y=$(grep -E '^y\s*=' "$input" | sed 's/.*=\s*//' | tr -d '[:space:]')
+z=$(grep -E '^z\s*=' "$input" | sed 's/.*=\s*//' | tr -d '[:space:]')
 
-if [ -n "$value" ]; then
-    # Mock computation: just return the value (or compute something from it)
-    result=$value
-    echo "Input value: $value"
+# Fallback to 'value' for backwards compatibility
+if [ -z "$x" ]; then
+    x=$(grep -E '^value\s*=' "$input" | sed 's/.*=\s*//' | tr -d '[:space:]')
+fi
+
+if [ -n "$x" ]; then
+    # Mock computation: compute result = x + y + z (or just x if y,z not present)
+    # Using awk for floating point arithmetic
+    result=$(awk "BEGIN {
+        x = ${x:-0}
+        y = ${y:-0}
+        z = ${z:-0}
+        print x + y + z
+    }")
+    echo "Input values: x=$x, y=${y:-0}, z=${z:-0}"
     echo "Result: $result"
     echo "$result" > output.txt
     echo "Calculation completed successfully."

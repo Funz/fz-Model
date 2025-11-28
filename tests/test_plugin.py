@@ -125,6 +125,8 @@ def test_with_fz():
         print("  Testing fz.fzi() on input.txt...", end=" ")
         variables = fz.fzi("examples/Model/input.txt", "Model")
         assert "x" in variables, "Variable 'x' not found in parsed input"
+        assert "y" in variables, "Variable 'y' not found in parsed input"
+        assert "z" in variables, "Variable 'z' not found in parsed input"
         print("✓")
         
         # Test compiling input file
@@ -132,20 +134,28 @@ def test_with_fz():
         with tempfile.TemporaryDirectory() as tmpdir:
             fz.fzc(
                 "examples/Model/input.txt",
-                {"x": 3.14},
+                {"x": 3.14, "y": 2.0, "z": 1.5},
                 "Model",
                 output_dir=tmpdir
             )
             
-            # Check compiled file exists
-            compiled_file = os.path.join(tmpdir, "x=3.14", "input.txt")
-            assert os.path.exists(compiled_file), "Compiled file not created"
+            # Check compiled file exists (it may be in a subdirectory)
+            compiled_file = None
+            for root, dirs, files in os.walk(tmpdir):
+                if "input.txt" in files:
+                    compiled_file = os.path.join(root, "input.txt")
+                    break
+            assert compiled_file is not None, "Compiled file not created"
             
-            # Check variable was substituted
+            # Check variables were substituted
             with open(compiled_file, 'r') as f:
                 content = f.read()
-                assert "3.14" in content, "Variable not substituted"
-                assert "${x}" not in content, "Variable marker still present"
+                assert "3.14" in content, "Variable x not substituted"
+                assert "2.0" in content or "2" in content, "Variable y not substituted"
+                assert "1.5" in content, "Variable z not substituted"
+                assert "${x}" not in content, "Variable marker ${x} still present"
+                assert "${y}" not in content, "Variable marker ${y} still present"
+                assert "${z}" not in content, "Variable marker ${z} still present"
         print("✓")
         
         print("  fz integration tests passed!\n")
