@@ -102,7 +102,7 @@ def test_example_files():
     print("Testing example files...")
     
     examples = [
-        "examples/Model/input.txt",
+        "examples/Model/input.txt"
     ]
     
     for example_file in examples:

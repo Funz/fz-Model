@@ -49,6 +49,6 @@ else
     echo "" > output.txt
 fi
 
-if [ -f $PID_FILE ]; then
-    rm -f $PID_FILE
+if [ -f "$PID_FILE" ]; then
+    rm -f "$PID_FILE"
 fi
