@@ -1,0 +1,10 @@
+{
+    "id": "Model",
+    "varprefix": "$",
+    "formulaprefix": "@",
+    "delim": "{}",
+    "commentline": "#",
+    "output": {
+        "result": "cat output.txt 2>/dev/null || echo ''"
+    }
+}

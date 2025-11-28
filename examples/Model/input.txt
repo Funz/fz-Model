@@ -1,0 +1,4 @@
+# Example input file for Model plugin
+# Variables are defined using ${variable_name} syntax
+
+value = ${x}
