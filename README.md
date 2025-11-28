@@ -31,18 +31,20 @@ pip install git+https://github.com/Funz/fz.git
 ```python
 import fz
 
-# Example: Run calculation with varying x value
+# Example: Run calculation with varying parameters
 results = fz.fzr(
     input_path="examples/Model/input.txt",
     input_variables={
-        "x": [1.0, 2.0, 3.0, 4.0, 5.0]
+        "x": [1.0, 2.0, 3.0, 4.0, 5.0],
+        "y": [1.0, 2.0],
+        "z": [0.5]
     },
     model="Model",
     calculators="localhost_Model",
     results_dir="my_results"
 )
 
-print(results[['x', 'result']])
+print(results[['x', 'y', 'z', 'result']])
 ```
 
 ### Directory Structure
@@ -69,11 +71,14 @@ your_project/
 # Example input file for Model plugin
 # Variables are defined using ${variable_name} syntax
 
-value = ${x}
+# Input parameters
+x = ${x}
+y = ${y}
+z = ${z}
 ```
 
 In this example:
-- `${x}` is a variable parameter that will be substituted by fz
+- `${x}`, `${y}`, and `${z}` are variable parameters that will be substituted by fz
 - Lines starting with `#` are comments
 
 ## Creating Your Own Plugin
